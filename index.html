@@ -37,14 +37,14 @@ function randomDate(start, end) {
 }
 // Create kid objects.
 kids = [
-	{name: "John", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
-	{name: "Ole", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
-	{name: "Lise", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
-	{name: "Rebekka", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
-	{name: "Brian", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
-	{name: "Thomas", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
-	{name: "Lone", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
-	{name: "Rasmus", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}
+	{name: "John", present: false, arrived_at: new Date().toISOString(), left_at: ""}, 
+	{name: "Ole", present: false, arrived_at: new Date().toISOString(), left_at: ""}, 
+	{name: "Lise", present: false, arrived_at: new Date().toISOString(), left_at: ""}, 
+	{name: "Rebekka", present: false, arrived_at: new Date().toISOString(), left_at: ""}, 
+	{name: "Brian", present: false, arrived_at: new Date().toISOString(), left_at: ""}, 
+	{name: "Thomas", present: false, arrived_at: new Date().toISOString(), left_at: ""}, 
+	{name: "Lone", present: false, arrived_at: new Date().toISOString(), left_at: ""}, 
+	{name: "Rasmus", present: false, arrived_at: new Date().toISOString(), left_at: ""}
 ];
 
 // Used to randomly choose between boy and girl.
@@ -58,7 +58,8 @@ kids.forEach((kid, index) => {
 	"<div class='col-auto kid" + index + "'>" + 
 	'<div class="card m-2" style="width: 12rem; background: #bd3c3c; height: rem;">' 
 		+ '<img class="card-img-top" src=' + kidImages[Math.floor(Math.random() * 2)] + ' alt=""><div class="card-body"><h5 class="card-title">' + kid.name 
-		+ '</h5><p class="card-text">'+ "<b>Last Seen:</b> " + kid.last_seen  + '</div></div>'+ "</div>" 
+		+ '</h5><p class="card-text">'+ "<b>Out:</b> " + kid.arrived_at  
+		+ '</div></div>'+ "</div>" 
 		);
 	// Draw the kids that are not present with red background.
 	} else {
@@ -67,7 +68,7 @@ kids.forEach((kid, index) => {
 	'<div class="card m-2" style="width: 12rem; background: #50b530; height: rem;">' +
 	'<img class="card-img-top" src=' + kidImages[Math.floor(Math.random() * 2)] + 'alt="">' +
 	'<div class="card-body"> <h5 class="card-title">' + kid.name + '</h5><p class="card-text">'+ 
-	"<b>Last Seen:</b> " + kid.last_seen  + '</div></div>'+ "</div>"	
+	"<b>In:</b> " + kid.arrived_at  + '</div></div>'+ "</div>"	
 	);
 	}
 	// Make each of the cards clickable (For fallback position). 
@@ -77,9 +78,11 @@ kids.forEach((kid, index) => {
     function(){
 		if(kids[index].present == true) {
 			$(this).css('background', '#bd3c3c');
+			$(".kid" + index + ' .card .card-body .card-text').html("<b>Out:</b> " + new Date().toISOString());
 			kids[index].present = false;
 		} else {
 			$(this).css('background', '#50b530');
+			$(".kid" + index + ' .card .card-body .card-text').html("<b>In:</b> " + new Date().toISOString());
 			kids[index].present = true;
 		}
     }
@@ -95,6 +98,7 @@ $('.simulate_arriving').on('click', function(event) {
 	 // Set kid to not be present.
 	 kids[randomNumber].present = false;
   elementString = ".kid" + randomNumber + " .card";
+  $(".kid" + randomNumber + ' .card .card-body .card-text').html("<b>Out:</b> " + new Date().toISOString());
   $(elementString.toString()).css("background", "#bd3c3c");
   // Popup that shows person has departed.
   alert(kids[randomNumber].name + " " + "has departed!");
@@ -102,6 +106,7 @@ $('.simulate_arriving').on('click', function(event) {
 	   // Set kid to be present.
   kids[randomNumber].present = true;
   elementString = ".kid" + randomNumber + " .card";
+  $(".kid" + randomNumber + ' .card .card-body .card-text').html("<b>In:</b> " + new Date().toISOString());
   $(elementString.toString()).css("background", "#50b530");
   // Popup that shows person has arrived.
   alert(kids[randomNumber].name + " " + "has arrived!");
