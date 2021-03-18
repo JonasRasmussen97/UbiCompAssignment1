@@ -37,7 +37,7 @@ function randomDate(start, end) {
 }
 // Create kid objects.
 kids = [
-	{name: "John", present: true, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
+	{name: "John", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
 	{name: "Ole", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
 	{name: "Lise", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
 	{name: "Rebekka", present: false, last_seen: randomDate(new Date(2021, 0, 1), new Date()).toISOString()}, 
@@ -50,26 +50,24 @@ kids = [
 // Used to randomly choose between boy and girl.
 kidImages = ["https://www.shareicon.net/data/512x512/2016/06/25/786551_people_512x512.png", "https://image.flaticon.com/icons/png/512/163/163811.png"]
 
-
-
 // Create HTML for each kid in the list.
 kids.forEach((kid, index) => {
 	// Draw the kids that are present with green background.
-	if(!kid.present) {
+	if(kid.present == false) {
 		$(".kidsList").append(
 	"<div class='col-auto kid" + index + "'>" + 
 	'<div class="card m-2" style="width: 12rem; background: #bd3c3c; height: rem;">' 
 		+ '<img class="card-img-top" src=' + kidImages[Math.floor(Math.random() * 2)] + ' alt=""><div class="card-body"><h5 class="card-title">' + kid.name 
-		+ '</h5><p class="card-text">' + "<b>Picked up: </b>" + kid.last_seen + '</div></div>'+ "</div>" 
+		+ '</h5><p class="card-text">'+ "<b>Last Seen:</b> " + kid.last_seen  + '</div></div>'+ "</div>" 
 		);
 	// Draw the kids that are not present with red background.
 	} else {
 	$(".kidsList").append(
-	"<div class='col-auto kid" + index + "'>" + 
-	'<div class="card m-2" style="width: 12rem; background: #50b530; height: rem;">' 
-		+ '<img class="card-img-top" src=' + kidImages[Math.floor(Math.random() * 2)] + ' alt=""><div class="card-body"><h5 class="card-title">' + kid.name 
-		+ '</h5><p class="card-text">' + 
-	"<b>Arrived at: </b> " + kid.last_seen + '</div></div>'+ "</div>"	
+	"<div class='col-auto'>" + 
+	'<div class="card m-2" style="width: 12rem; background: #50b530; height: rem;">' +
+	'<img class="card-img-top" src=' + kidImages[Math.floor(Math.random() * 2)] + 'alt="">' +
+	'<div class="card-body"> <h5 class="card-title">' + kid.name + '</h5><p class="card-text">'+ 
+	"<b>Last Seen:</b> " + kid.last_seen  + '</div></div>'+ "</div>"	
 	);
 	}
 	// Make each of the cards clickable (For fallback position). 
@@ -77,18 +75,12 @@ kids.forEach((kid, index) => {
   .css('cursor', 'pointer')
   .click(
     function(){
-		if(kids[index].present) {
+		if(kids[index].present == true) {
 			$(this).css('background', '#bd3c3c');
-            var currentDate = new Date();
 			kids[index].present = false;
-            kids[index].last_seen = currentDate;
 		} else {
 			$(this).css('background', '#50b530');
 			kids[index].present = true;
-            var currentDate = new Date();
-            var time = currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
-            var date = currentDate.getDate() + "/" + (currentDate.getMonth()+1) + "/" + currentDate.getFullYear();
-            kids[index].last_seen = currentDate;
 		}
     }
   );
@@ -99,14 +91,14 @@ kids.forEach((kid, index) => {
 $('.simulate_arriving').on('click', function(event) {
   event.preventDefault(); // To prevent following the link (optional)
   randomNumber = Math.floor(Math.random() * 8).toString();
-  if(kids[randomNumber].present) {
+  if(kids[randomNumber].present == true) {
 	 // Set kid to not be present.
 	 kids[randomNumber].present = false;
   elementString = ".kid" + randomNumber + " .card";
   $(elementString.toString()).css("background", "#bd3c3c");
   // Popup that shows person has departed.
   alert(kids[randomNumber].name + " " + "has departed!");
-  } else if(!kids[randomNumber].present) {
+  } else if(kids[randomNumber].present == false) {
 	   // Set kid to be present.
   kids[randomNumber].present = true;
   elementString = ".kid" + randomNumber + " .card";
